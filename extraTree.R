@@ -1,4 +1,4 @@
-totaldata <- read.csv("missforestimp.csv", header = T)
+totaldata <- read.csv("trainimp_with_app_id.csv", header = T)
 train <- totaldata[1:9962,-1]
 train <- cbind(Res=orgdata[,2], train)
 test <- totaldata[9963:14943,-1]
