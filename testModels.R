@@ -9,7 +9,7 @@ orig$GOOD <- as.factor(credit$GOOD)
 orig <- orig[,-1]
 holdout <- holdout[,-1]
 
-
+# intoroduce a new level for missing values
 library(gdata)
 orig$GOOD <- NAToUnknown(x = orig$GOOD, unknown = "other")
 
@@ -17,6 +17,7 @@ orig$GOOD <- NAToUnknown(x = orig$GOOD, unknown = "other")
 require(caret)
 trainIndex <- createDataPartition(orig$GOOD, p=0.7, list=FALSE, times=1)
 
+# train a random forest model
 library(randomForest)
 train <- orig[trainIndex,]
 test <- orig[-trainIndex,]
