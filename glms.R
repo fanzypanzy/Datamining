@@ -6,14 +6,18 @@ mydat <- read.csv("trainimp_with_app_id.csv", header = TRUE)
 orig <- mydat[1:9962,]
 holdout <- mydat[9963:14943,]
 
+
 orig$GOOD <- as.factor(credit$GOOD)
 orig <- orig[,-1]
 holdout <- holdout[,-1]
 
+m <- which(is.na(orig$GOOD))
+origResponse <- orig[-m,]
+
 # separate into training and test data
-trainIndex <- createDataPartition(orig$GOOD, p=0.7, list=FALSE, times=1)
-train <- orig[trainIndex,]
-test <- orig[-trainIndex,]
+trainIndex <- createDataPartition(origResponse$GOOD, p=0.7, list=FALSE, times=1)
+train <- origResponse[trainIndex,]
+test <- origResponse[-trainIndex,]
 
 # fit model (only with two outcomes)
 binLogit <- glm(GOOD~ ., data= train,family=binomial)
