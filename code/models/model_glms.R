@@ -1,6 +1,6 @@
 # GLMs
-credit<-read.csv("dataset_modelling.csv",header=T,na.strings=c("", ".", "NA", "99999"))
-mydat <- read.csv("trainimp_with_app_id.csv", header = TRUE)
+credit<-read.csv("../dataset_modelling.csv",header=T,na.strings=c("", ".", "NA", "99999"))
+mydat <- read.csv("../dataset_imputed.csv", header = TRUE)
 
 # seperate Liangliangs imputed dataset into original data and holdout data
 orig <- mydat[1:9962,]

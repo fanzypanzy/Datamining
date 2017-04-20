@@ -1,4 +1,11 @@
-totaldata <- read.csv("trainimp_with_app_id.csv", header = T)
+orgdata <- read.csv("../dataset_modelling.csv", header = T, na.strings=c(".","","99999"))
+holdout <- read.csv("../holdout_data.csv", header = T, na.strings=c(".","","99999"))
+
+library(gdata)
+orgdata$GOOD <- as.factor(orgdata$GOOD)
+orgdata[,2] <- NAToUnknown(x = orgdata[,2], unknown = "2")
+
+totaldata <- read.csv("../dataset_imputed.csv", header = T)
 train <- totaldata[1:9962,-1]
 train <- cbind(Res=orgdata[,2], train)
 test <- totaldata[9963:14943,-1]
@@ -29,16 +36,17 @@ test_org <- train_dummy[-trainIndex,]
 
 
 library(extraTrees)
-library(rJava)
-nonsense <- train_org[,-c(1,4,7)]
+set.seed(123)
+nonsense <- train_org[,-c(1,4,7,22)]
 target <- as.factor(train_org$Res)
 et <- extraTrees(nonsense, 
                  target, 
-                 ntree=309,
-                 mtry= 6,
-                 nodesize = 22,
+                 ntree=482,
+                 mtry= 7,
+                 nodesize = 51,
                  numRandomCuts = 5)
-etpred <- predict(et, test_org[,-c(1,4,7)])
+etpred <- predict(et, test_org[,-c(1,4,7,22)])
 table(testClass=factor(test_org$Res),
       predClass=etpred)
 confusionMatrix(test_org$Res, etpred)
+# 80.31%

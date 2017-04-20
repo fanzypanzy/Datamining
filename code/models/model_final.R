@@ -1,5 +1,5 @@
-credit<-read.csv("dataset_modelling.csv",header=T,na.strings=c("", ".", "NA", "99999"))
-mydat <- read.csv("trainimp_with_app_id.csv", header = TRUE)
+credit<-read.csv("../dataset_modelling.csv",header=T,na.strings=c("", ".", "NA", "99999"))
+mydat <- read.csv("../dataset_imputed.csv", header = TRUE)
 
 # seperate Liangliangs imputed dataset into original data and holdout data
 orig <- mydat[1:9962,]
@@ -22,11 +22,11 @@ library(randomForest)
 train <- orig[trainIndex,]
 test <- orig[-trainIndex,]
 rf.model <- randomForest(factor(GOOD)~., data = train, 
-                         ntree = 443, 
-                         mtry = 8, 
-                         nodesize = 39, 
-                         #cutoff = c(0.465,0.535),
+                         ntree = 482, 
+                         mtry = 21, 
+                         nodesize = 51, 
                          importance = T)
 rf.predict <- predict(rf.model, test)
+require(e1071)
 (cm <- confusionMatrix(test$GOOD, rf.predict))
 

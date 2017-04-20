@@ -1,6 +1,6 @@
 dat <-
   read.csv(
-    "missforestimputed.csv",
+    "../missforestimputed.csv",
     header = T,
     na.strings = c("", ".", "NA", "99999")
   )

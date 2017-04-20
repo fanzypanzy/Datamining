@@ -1,6 +1,6 @@
 ##################Practical 2 by group Nacional #####################
                       ## Data import ##
-credit<-read.csv("dataset_modelling.csv",header=T,na.strings=c("", ".", "NA", "99999"))
+credit<-read.csv("../dataset_modelling.csv",header=T,na.strings=c("", ".", "NA", "99999"))
 attach(credit)
                    ## Deal with the missing data ##
 
@@ -44,34 +44,34 @@ write.csv(mice.rf,"mice by random forest.csv")
 mice.pmm <- mice(creditdata2,m=1,meth='pmm') #predictive mean matching 
 mice.pmm <- complete(mice.pmm,1) 
 mice.pmm$response <- response
-write.csv(mice.pmm,"mice by predictive mean matching.csv")
+write.csv(mice.pmm,"mice_imputation_datasets/mice by predictive mean matching.csv")
 
 mice.cart<-mice(creditdata2,m=1,meth='cart')#Classification and regression trees (any)
 mice.cart<-complete(mice.cart,1)
 mice.cart$response<-response
-write.csv(mice.cart,"mice by classification and regression trees.csv")
+write.csv(mice.cart,"mice_imputation_datasets/mice by classification and regression trees.csv")
 
 mice.sample<-mice(creditdata2,m=1,meth='sample')#Random sample from the observed values (any)
 mice.sample<-complete(mice.sample,1)
 mice.sample$response<-response
-write.csv(mice.sample,"mice by random sample from the observed value.csv")
+write.csv(mice.sample,"mice_imputation_datasets/mice by random sample from the observed value.csv")
 
 
 mice.fastpmm<-mice(creditdata2,m=1,meth='fastpmm')
 mice.fastpmm<-complete(mice.fastpmm,1)#Experimental: Fast predictive mean matching using C++ (any)
 mice.fastpmm$response<-response
-write.csv(mice.fastpmm,"mice by fast predictive mean matching using c++.csv")
+write.csv(mice.fastpmm,"mice_imputation_datasets/mice by fast predictive mean matching using c++.csv")
 
 mice.norm.boot<-mice(creditdata2,m=1,mth='norm.boot')
 mice.norm.boot<-complete(mice.norm.boot,1)#Linear regression using bootstrap 
 mice.norm.boot$response<-response
-write.csv(mice.norm.boot,"mice by linear regression using bootstrap.csv")
+write.csv(mice.norm.boot,"mice_imputation_datasets/mice by linear regression using bootstrap.csv")
 
 
 mice.2lonly.norm<-mice(creditdata2,m=1,mth='2lonly.norm')#Imputation at level-2 by Bayesian linear regression (numeric)
 mice.2lonly.norm<-complete(mice.2lonly.norm,1)
 mice.2lonly.norm$response<-response
-write.csv(mice.2lonly.norm,"mice by level-2 by Bayesian linear regression.csv")
+write.csv(mice.2lonly.norm,"mice_imputation_datasets/mice by level-2 by Bayesian linear regression.csv")
 
 
 ###############split data into train and test part by random forest(mice)
