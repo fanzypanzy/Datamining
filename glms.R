@@ -1,4 +1,4 @@
-# try glms
+# GLMs
 credit<-read.csv("dataset_modelling.csv",header=T,na.strings=c("", ".", "NA", "99999"))
 mydat <- read.csv("trainimp_with_app_id.csv", header = TRUE)
 
@@ -17,12 +17,36 @@ test <- orig[-trainIndex,]
 
 # fit model (only with two outcomes)
 binLogit <- glm(GOOD~ ., data= train,family=binomial)
+
+# find the best threshold
+library(pROC)
+train$prob <-  predict(binLogit,type=c("response"), newdata = train)
+
+g <- roc(GOOD ~ prob, data = train)
+best<-coords(g, "best")
+
+# plot ROC curve
+df<-data.frame(t(coords(g, seq(0, 1, 0.01))))
+require(ggplot2)
+p <- ggplot(df)
+p <- p + geom_line(aes(1-specificity, sensitivity, colour=threshold), size=3) +
+  theme_bw()
+p + geom_abline(intercept=0, slope=1)  +
+  geom_hline(yintercept=as.numeric(best[3]), colour="darkgrey", linetype="longdash") +
+  geom_vline(xintercept = as.numeric(1-best[2]), colour="darkgrey", linetype="longdash") +
+  scale_colour_gradient(high="red", low="white") +
+  geom_line(aes(1-specificity, sensitivity), colour="blue", alpha=1/3) +
+  xlab("1-Specificity (False Positive Rate)") + ylab("Sensitivity (True Positive Rate)") +
+  labs(colour="Threshold")
+
+
+
 # predict test data set (predicts probabilities of outcomes)
 predLogit <- predict(binLogit, type = "response", newdata = test)
 # convert probabilities to actual outcomes
-# (taking the mean is a common strategy, although there might be a slightly better value)
-val<-(mean(fitted(binLogit))) 
-resp<-ifelse(predLogit>val,1,0)
+# (taking the optimal value calculated above)
+
+resp<-ifelse(predLogit>best[1],1,0)
 (confMat <- confusionMatrix(resp, test$GOOD))
 confMat$overall[1]
 
